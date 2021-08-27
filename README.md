@@ -1,7 +1,6 @@
 # webhook-issue-relay
 
 ## Overview
-
 ### Architecture
 
 ![Architecture](architecture.png)
@@ -12,7 +11,6 @@
 // workflow clickup to dooray
 : clickup event(automation) -> webhook(clickup format) -> lambda -> dynamodb -> request to dooray api
 ```
-
 
 
 ### Functions
