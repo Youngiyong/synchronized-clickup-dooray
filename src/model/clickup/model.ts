@@ -310,6 +310,8 @@ export const clickupSyncTask = (clickupWebhook: IWebhookFromClickup) => {
 	
 	switch(clickupWebhook.event){
 		case "taskCreated":
-
+			break
+		case "taskUpdated":
+			break
 	}
 }

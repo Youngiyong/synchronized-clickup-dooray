@@ -347,8 +347,8 @@ export const postCommentCreated = async (doorayWebHook: IWebhookFromDooray) => {
 }
 
 export const postWorkflowChanged = async (doorayWebHook: IWebhookFromDooray) => {
-
-}
+	console.log(doorayWebHook)
+}	
 
 export const dooraySyncTask =  async (doorayWebhook: IWebhookFromDooray) => {
 	
