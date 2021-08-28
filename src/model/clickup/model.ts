@@ -65,7 +65,7 @@ export type IResponseClickUpTask = {
 
 
 export const requestClickupGetWebHook = async() => {
-	const url = `https://api.clickup.com/api/v2/team/5719512/webhook`
+	const url = `https://api.clickup.com/api/v2/team/1234/webhook`
 	return await axios.get(url, {
 		headers: {
 			"Authorization": process.env.CLICKUP_API_KEY,
@@ -75,9 +75,9 @@ export const requestClickupGetWebHook = async() => {
 }
 
 export const requestClickupCreateWebHook = async() => {
-	const url = `https://api.clickup.com/api/v2/team/5719512/webhook`
+	const url = `https://api.clickup.com/api/v2/team/1234/webhook`
 	const param = {
-		"endpoint": "https://7ccttkdbo6.execute-api.ap-northeast-2.amazonaws.com/prod/clickup2dooray/sync-task",
+		"endpoint": "https://aws/prod/clickup2dooray/sync-task",
 		"events": [
 		  "taskCreated",
 		  "taskUpdated",
@@ -95,9 +95,9 @@ export const requestClickupCreateWebHook = async() => {
 }
 
 export const requestClickupUpdateWebHook = async() => {
-	const url = `https://api.clickup.com/api/v2/webhook/58448727-9850-4c97-8e18-3cccf62dd741`
+	const url = `https://api.clickup.com/api/v2/webhook/58448727-9850-4c97-8`
 	const param = {
-		"endpoint": "https://7ccttkdbo6.execute-api.ap-northeast-2.amazonaws.com/prod/clickup2dooray/sync-task",
+		"endpoint": "https://aws/prod/clickup2dooray/sync-task",
 		"events": [
 			"taskCreated",
 			"taskUpdated",
@@ -182,7 +182,7 @@ export const requestClickupToUpdateTask = async (taskId: string, param: IRequest
 
 
 export const requestClickupToUpdateCustoFieldTask = async (taskId: string, param: IRequestClickupCreateTask) => {
-	const url = `https://app.clickup.com/api/v2/task/${taskId}/?custom_task_ids=true&team_id=5719512`;
+	const url = `https://app.clickup.com/api/v2/task/${taskId}/?custom_task_ids=true&team_id=1234`;
 	return await axios.put(url, param, {
 		headers: {
 			"Authorization": process.env.CLICKUP_API_KEY,

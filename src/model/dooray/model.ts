@@ -6,21 +6,21 @@ import { create } from "../task/create"
 export type IWebhookFromDooray = {
 	webhookType?: string, //'postWorkflowChanged',
 	tenant?: {
-		id?: string, //'2393445616658000086' 
+		id?: string, //'' 
 	},
 	hookEventType?: string, //'postWorkflowChanged',
 	version?: string | number, //2,
 	project?: {
-		id?: string, //'2531758068456824356',
-		code?: string, //'미로--개발--이슈관리(통합)'
+		id?: string, //'',
+		code?: string, //'
 	},
 	source?: {
 		type?: string, //'member',
 		member?: {
-			id?: string, //'2393591811207727931',
-			name?: string, //'이찬린',
-			userCode?: string, //'charlie',
-			emailAddress?: string, //'charlie@lastorder.co.kr'
+			id?: string, //
+			name?: string, //'',
+			userCode?: string, //'',
+			emailAddress?: string, //'
 		}
 	},
 	body?: {
@@ -267,8 +267,8 @@ export const postCreated = async (doorayWebhook: IWebhookFromDooray) => {		//Jso
 	const listNumber = findListByProjectId(doorayWebhook.project.id);
 	let status;
 
-	if(listNumber=="28922731"){
-		status = "배포 계획/버저닝"
+	if(listNumber=="1234"){
+		status = "1234"
 	} else {
 		status = "TO DO"
 	}
