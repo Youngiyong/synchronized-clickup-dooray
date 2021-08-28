@@ -82,7 +82,8 @@ provider:
     CLICKUP_SECRET_KEY: "1234"
     CLICKUP_API_KEY: "pk_1234"
     DOORAY_API_KEY: "dooray-api 1234" #FromClickup giyong@lastorder.co.kr
-    DYNAMODB_TABLE: !Ref ClickupUserTable
+    MYROMEMBER_TABLE: !Ref MyroMemberTable
+    MYROTASK_TABLE: !Ref MyroTaskTable
 functions:
   dooray2clickupSyncTask:
     handler: src/dooray2clickup/syncTask.run
@@ -132,10 +133,23 @@ functions:
 resources:
   Description: myrocompany-issue-relay WebHook 
   Resources:
-    ClickupUserTable:
+    MyroMemberTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.SERVICE_NAME}
+        TableName: myrocompany-members
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id"
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    MyroTaskTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: myrocompany-tasks
         AttributeDefinitions:
           - AttributeName: "id"
             AttributeType: "S"
