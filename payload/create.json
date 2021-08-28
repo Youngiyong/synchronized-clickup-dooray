@@ -54,6 +54,6 @@
 	  "httpMethod": "POST",
 	  "apiId": "j3azlsj0c4"
 	},
-	"body": "{\"webhookType\":\"postCreated\",\"tenant\":{\"id\":\"2393445616658000086\"},\"hookEventType\":\"postCommentCreated\",\"version\":2,\"comment\":{\"id\":\"3074951045486975057\",\"subtype\":\"general\",\"createdAt\":\"2021-08-13T23:58:50+09:00\",\"body\":{\"mimeType\":\"text/x-markdown\",\"content\":\"\",\"emptyContent\":true}},\"organization\":{\"id\":\"2393445617159495713\"},\"project\":{\"id\":\"2531758068456824356\",\"code\":\"미로--개발--이슈관리(통합)\"},\"post\":{\"id\":\"3074946650035980397\",\"number\":2578,\"subject\":\"오늘 탈퇴한 회원들 좀 월요일에 뽑아주세요\"},\"source\":{\"type\":\"member\",\"member\":{\"id\":\"2393591811207727931\",\"name\":\"윤기용\",\"userCode\":\"charlie\",\"emailAddress\":\"giyong@lastorder.co.kr\"}}}",
+	"body": "{\"webhookType\":\"postCreated\",\"tenant\":{\"id\":\"213\"},\"hookEventType\":\"postCommentCreated\",\"version\":2,\"comment\":{\"id\":\"213\",\"subtype\":\"general\",\"createdAt\":\"2021-08-13T23:58:50+09:00\",\"body\":{\"mimeType\":\"text/x-markdown\",\"content\":\"\",\"emptyContent\":true}},\"organization\":{\"id\":\"2393445617159495713\"},\"project\":{\"id\":\"321\",\"code\":\"321--231--123(321)\"},\"post\":{\"id\":\"3074946650035980397\",\"number\":2578,\"subject\":\"오늘 탈퇴한 회원들 좀 월요일에 뽑아주세요\"},\"source\":{\"type\":\"member\",\"member\":{\"id\":\"312\",\"name\":\"윤기용\",\"userCode\":\"charlie\",\"emailAddress\":\"giyong@lastorder.co.kr\"}}}",
 	"isBase64Encoded": false
   }
