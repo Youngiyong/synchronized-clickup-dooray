@@ -2,18 +2,26 @@
 
 // projectId with ListId pair
 export const pareDoorayProjectByClickupList = {
-	"2531758068456824356": "123", // 이슈&요청
-	"2978225050341435736": "123", // 배표
-	"3078238647380653693": "123"	//자동화 테스트
+
 }
 
 export const pareDoorayWorkFlowByClickupList = {
+	
+}
 
+export const pareClickupWorkFlowByDoorayList = {
+	"요청" 					 : "to do",
+	"진행 중" 				 : "in progress",
+	"테스팅" 				 : "deployed - dev",
+	"완료(배포전)"			  : "deployed - dev",
+	"완료(배포)" 			  : "done",
+	"보류" 					 : "hold",
+	"Dropped" 				: "droped"
 }
 
 export const pareDoorayMemberByClickupList = {
+	 "7823814" : "3046321719599858766",			// 윤기용
 
-	
 }
 
 
@@ -21,7 +29,10 @@ export const pareDoorayMemberByClickupList = {
 
  /* hightest, high, normal, low, lowest, none */
 export const pareDoorayPriorityClickupList = {
-
+	1 : "hightest",
+	2 : "high",
+	3 : "normal",
+	4 : "low",
 }
 
 export const pareDoorayTagByClickupList = {
@@ -33,6 +44,17 @@ export const DoorayTagList = {
 
 }
 
+
+export const findListByClickupWorkFlowId = (workflowName: any) => {
+	for (let [key, value] of Object.entries(pareClickupWorkFlowByDoorayList)) {
+		if (workflowName == key) {
+			return value;
+		} else if (workflowName == value){
+			return key;
+		}
+	}
+}
+
 export const findListByPriorityrId = (priorityId: any) => {
 	for (let [key, value] of Object.entries(pareDoorayPriorityClickupList)) {
 		if (priorityId == key) {
@@ -42,6 +64,7 @@ export const findListByPriorityrId = (priorityId: any) => {
 		}
 	}
 }
+
 
 
 export const findListByMemberId = (memberId: string) => {
