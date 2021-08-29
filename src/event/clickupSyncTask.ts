@@ -12,9 +12,8 @@ export const run: Handler = async (event, context: Context, callback: Callback) 
     const clickupWebhook: IWebhookFromClickup = event.body;
 
 	console.log("incomming hook from clickup", clickupWebhook);
-	
-    await clickupSyncTask(clickupWebhook)
 
-    console.log("Successful clickupSyncTask!")
-    
+	await clickupSyncTask(clickupWebhook)
+
+    console.log("Successful clickupSyncTask!") 
 }

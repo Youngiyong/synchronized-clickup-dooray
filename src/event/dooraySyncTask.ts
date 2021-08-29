@@ -12,9 +12,9 @@ export const run: Handler = async (event, context: Context, callback: Callback) 
     const doorayWebhook: IWebhookFromDooray = event.body;
 
 	console.log("incomming hook from dooray", doorayWebhook);
-	
-    await dooraySyncTask(doorayWebhook)
 
-    console.log("Successful dooraySyncTask!")
-    
+    await dooraySyncTask(doorayWebhook))
+
+    console.log("Successful dooraySyncTask!") 
+
 }
