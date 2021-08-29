@@ -1,26 +1,30 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { isJson, findListByMemberId, findListByProjectId, findListByPriorityrId, findListByTagId, findListByWorkFlowId, findProjectIdByListId } from '../../common/model';
-import { requestClickupToDeleteTask, requestClickupGetTasks, getClickupTaskId, requestClickupToCreateTaskComment, IRequestClickupCreateTaskComment, IRequestClickupCreateTask, requestClickupToCreateTask } from '../clickup/model'
+import { isJson, findListByMemberId, findListByProjectId, findListByPriorityrId, findListByTagId, findListByWorkFlowId, findProjectIdByListId, findListByClickupWorkFlowId } from '../../common/model';
+import { requestClickupToDeleteTask, requestClickupGetTasks, getClickupTaskId, requestClickupToCreateTaskComment, IRequestClickupCreateTaskComment, IRequestClickupCreateTask, requestClickupToCreateTask, requestClickupToUpdateTask } from '../clickup/model'
 import { IRequestMyroCompnayCreateTask } from "../task/model"
 import { create } from "../task/create"
+import { findMyroTaskById } from '../task/find';
+import { updateTaskStatus } from '../task/update';
+
+
 export type IWebhookFromDooray = {
 	webhookType?: string, //'postWorkflowChanged',
 	tenant?: {
-		id?: string, //'' 
+		id?: string, //'2393445616658000086' 
 	},
 	hookEventType?: string, //'postWorkflowChanged',
 	version?: string | number, //2,
 	project?: {
-		id?: string, //'',
-		code?: string, //'
+		id?: string, //'2531758068456824356',
+		code?: string, //'미로--개발--이슈관리(통합)'
 	},
 	source?: {
 		type?: string, //'member',
 		member?: {
-			id?: string, //
-			name?: string, //'',
-			userCode?: string, //'',
-			emailAddress?: string, //'
+			id?: string, //'2393591811207727931',
+			name?: string, //'이찬린',
+			userCode?: string, //'charlie',
+			emailAddress?: string, //'charlie@lastorder.co.kr'
 		}
 	},
 	body?: {
@@ -36,6 +40,11 @@ export type IWebhookFromDooray = {
 			content?: string,
 			emptyContent?: boolean,
 		},
+	}
+	workflow : {
+		names?: [],
+		id?: string,
+		class?: string
 	}
 	post: {
 		createdAt?: string,
@@ -248,9 +257,19 @@ export const getDoorayPostId = (taskData: any, postId: string) => {
 	}
 }
 
+export const getDoorayWorkFlowId = (doorayWebHook: IWebhookFromDooray) => {
+	let data = doorayWebHook.workflow.names
+	console.log(doorayWebHook.workflow)
+	console.log(data)
+	for(let obj of data){
+		if(obj.locale=="ko_KR"){
+			return obj.name
+		}
+	}
+}
+
 export const postCreated = async (doorayWebhook: IWebhookFromDooray) => {		//Json Parse Check
 	const clickupContent = isJson(doorayWebhook.post.body.content) ? JSON.parse(doorayWebhook.post.body.content) : ""
-
 	const postId = "f7242db7-4ff4-4400-85d8-14b21dd03890"
 	const customFields: any = [ { id : postId, value: doorayWebhook.post.id  } ]
 
@@ -267,8 +286,8 @@ export const postCreated = async (doorayWebhook: IWebhookFromDooray) => {		//Jso
 	const listNumber = findListByProjectId(doorayWebhook.project.id);
 	let status;
 
-	if(listNumber=="1234"){
-		status = "1234"
+	if(listNumber=="28922731"){
+		status = "배포 계획/버저닝"
 	} else {
 		status = "TO DO"
 	}
@@ -302,53 +321,84 @@ export const postCreated = async (doorayWebhook: IWebhookFromDooray) => {		//Jso
 			console.log("=================>2", err);
 		});
 	
-	let requestDynamo: IRequestMyroCompnayCreateTask;
+	let requestDynamo: IRequestMyroCompnayCreateTask = {
+		id 			: doorayWebhook.post.id,
+		taskId		: "none",
+		taskTitle 	: doorayWebhook.post.subject,
+		taskStatus  : status, 
+	}
 
-	requestDynamo.post_id = doorayWebhook.post.id
-	requestDynamo.post_status = status
-	requestDynamo.title = doorayWebhook.post.subject
-	requestDynamo.created_at = "D"
-	await create(requestDynamo);
-	console.log("request DynamoDB Task Successful!!")
-	
+	await create(requestDynamo)
+	.then(res => {
+		console.log("Sucess request DynamoDB Task", res)
+	}).catch(error => {
+		console.log("Fail request DynamoDB Task", error)
+	});
+
 }
 
 export const postCommentCreated = async (doorayWebHook: IWebhookFromDooray) => {
 	if(doorayWebHook.comment.body.content.lastIndexOf('From Dooray')==-1 && doorayWebHook.comment.body.content.lastIndexOf('From Clickup')==-1){
 
-		const listNumber = findListByProjectId(doorayWebHook.project.id);
-		
-		//ClickUp All Task Get
-		const clickupTasks = await requestClickupGetTasks(listNumber)
-
-		//DooraySubject == ClickUpSubject 비교해서 TaskNumber를 얻어온다.
-		const taskNumber = getClickupTaskId(doorayWebHook, clickupTasks)
-
+		const task = await findMyroTaskById(doorayWebHook.post.id)
+		const taskId = task.taskId
 		const comment = doorayWebHook.comment.body.content ? doorayWebHook.comment.body.content : " "
 
-		const member = findListByMemberId(doorayWebHook.source.member.id) ? findListByMemberId(doorayWebHook.source.member.id) : "5987495"
-	
 		let request: IRequestClickupCreateTaskComment = {
-			comment_text: comment + "\n" + " From Dooray",
-			assignee: member,
+			comment_text: comment + "\n\n" + "From Dooray",
 			notify_all: true
 		}
 
-		await requestClickupToCreateTaskComment(taskNumber, request)
+		if (taskId){
+			await requestClickupToCreateTaskComment(taskId, request)
 			.then(res => {
 				console.log("=================>1", res.data);
 			})
 			.catch(err => {
 				console.log("=================>2", err);
 			});
+		} else console.log("taskID is not exist DynamoDB")
+
 	} else {
 		console.log("This Comment is exist")
 	}
+	
 }
 
 export const postWorkflowChanged = async (doorayWebHook: IWebhookFromDooray) => {
-	console.log(doorayWebHook)
-}	
+	const task = await findMyroTaskById(doorayWebHook.post.id)
+	console.log(task)
+	const workFlowName = getDoorayWorkFlowId(doorayWebHook)
+	const clickupwWorkFlowName   = findListByClickupWorkFlowId(workFlowName)
+						
+
+	const workFlowId = findListByWorkFlowId(clickupwWorkFlowName)
+	console.log(workFlowName, clickupwWorkFlowName, workFlowId, task.taskStatus)
+
+	if(workFlowId===task.taskStatus){
+		console.log("DynamoDB Status does not update ")
+	
+	} else {	
+		let request: IRequestClickupCreateTask = { status : clickupwWorkFlowName }
+		
+		await requestClickupToUpdateTask(task.taskId, request)
+		.then(res => {
+			console.log("=================>1", res.data);
+		})
+		.catch(err => {
+			console.log("=================>2", err);
+		});
+
+		await updateTaskStatus(workFlowId, doorayWebHook.post.id)
+
+		.then(res => {
+			console.log(res, "Success: update DynamoDB Task Status ")
+		}).catch(err => {
+			console.log(err)
+		})
+	}
+
+}
 
 export const dooraySyncTask =  async (doorayWebhook: IWebhookFromDooray) => {
 	
