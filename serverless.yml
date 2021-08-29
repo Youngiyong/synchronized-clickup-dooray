@@ -116,22 +116,9 @@ functions:
             origin: "*"
             headers: "*"
           private: false
-          
-  create:
-    handler: src/create.run
-    description: "Dynamo API"
-    events:
-      - http:
-          path: /user/
-          method: post
-          integration: lambda
-          cors:
-            origin: "*"
-            headers: "*"
-          private: false
 
 resources:
-  Description: myrocompany-issue-relay WebHook 
+  Description: webhook-issue-relay WebHook 
   Resources:
     MyroMemberTable:
       Type: AWS::DynamoDB::Table
